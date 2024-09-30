@@ -9,6 +9,7 @@ import evaluation_pb2
 import evaluation_pb2_grpc
 import grpc
 import gymnasium as gym
+from stable_baselines3 import PPO
 
 from utils import RemoteConnection
 
@@ -71,6 +72,9 @@ else:
     rc = RemoteConnection("localhost:8085")
 
 policy = Policy(rc)
+model = PPO.load('new_baseline')
+
+print('Loading Manipulation Policy')
 
 # compute correct observation space using the custom keys
 shape = get_custom_observation(rc, custom_obs_keys).shape
@@ -92,7 +96,8 @@ while not flat_completed:
 
         ################################################
         ## Replace with your trained policy.
-        action = rc.action_space.sample()
+        obs = get_custom_observation(rc)
+        action = model.predict(obs)
         ################################################
 
         base = rc.act_on_environment(action)

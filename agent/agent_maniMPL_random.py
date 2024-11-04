@@ -77,7 +77,7 @@ path = '/'.join(os.path.realpath('baseline.zip').split('/')[:-1])
 
 root_path = os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir)))
 print(root_path)
-model = PPO.load(os.path.join(root_path, 'agent','baseline'))
+model = PPO.load(os.path.join(root_path, 'baseline'))
 
 print('Loading Manipulation Policy')
 

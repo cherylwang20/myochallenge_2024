@@ -37,9 +37,9 @@ if [ "$PassEvalAI" = "true" ] && [ "$PassDocker" = "true" ]; then
     export PYTHONPATH="./environment/:$PYTHONPATH"
 
 
-    chmod u+r+x ./test/test_mani_agent.sh
-    chmod u+r+x ./test/test_loco_agent.sh
+    chmod u+r+x ./test/test_mani_agent_random.sh
+    chmod u+r+x ./test/test_loco_agent_random.sh
 
-    # ./test/test_mani_agent.sh
-    ./test/test_loco_agent.sh
+    ./test/test_mani_agent_random.sh
+    ./test/test_loco_agent_random.sh
 fi

@@ -5,7 +5,11 @@ import sys
 import os
 import requests
 import json
-
+import sys
+sys.path.append('../')
+sys.path.append('.')
+sys.path.append("../utils")
+sys.path.append("utils")
 
 from concurrent import futures
 import time

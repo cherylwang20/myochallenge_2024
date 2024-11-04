@@ -5,6 +5,7 @@ import sys
 sys.path.append('../')
 sys.path.append('.')
 sys.path.append("../utils")
+sys.path.append('utils')
 
 import copy
 import numpy as np
@@ -28,14 +29,10 @@ custom_obs_keys = [
     'pros_hand_qvel',
     'object_qpos',
     'object_qvel',
-    'start_pos',
-    'goal_pos',
-    'obj_pos',
-    'reach_err',
-    'pass_err',
     'act',
     "touching_body",
 ]
+
 
 def pack_for_grpc(entity):
     return pickle.dumps(entity)
@@ -103,8 +100,9 @@ while not flat_completed:
 
         ################################################
         ## Replace with your trained policy.
-        obs = get_custom_observation(rc)
+        obs = get_custom_observation(rc, custom_obs_keys)
         action = model.predict(obs)
+        action = action[0]
         action[30] = 1
         if step > 130:
             action[32:40] = 0

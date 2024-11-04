@@ -1,6 +1,10 @@
 import os
 import pickle
 import time
+import sys
+sys.path.append('../')
+sys.path.append('.')
+sys.path.append("../utils")
 
 import copy
 import numpy as np
@@ -71,8 +75,10 @@ if LOCAL_EVALUATION:
 else:
     rc = RemoteConnection("localhost:8085")
 
-policy = Policy(rc)
-model = PPO.load('new_baseline')
+#policy = Policy(rc)
+path = '/'.join(os.path.realpath('baseline.zip').split('/')[:-1])
+print(path)
+model = PPO.load(os.path.join(path, 'agent','baseline'))
 
 print('Loading Manipulation Policy')
 
@@ -92,12 +98,30 @@ while not flat_completed:
 
     print(f"Trial: {trial}, flat_completed: {flat_completed}")
     counter = 0
+    step = 0
     while not flag_trial:
 
         ################################################
         ## Replace with your trained policy.
         obs = get_custom_observation(rc)
         action = model.predict(obs)
+        action[30] = 1
+        if step > 130:
+            action[32:40] = 0
+            action[40:49] = 1
+
+        #hard coding the MPL to the desire position, since we know the actuation of the MPL is the last 17 index of action
+        action[-17:] = np.array([-0.65001469 , 1.     ,    -0.23187843 , 0.59583695 , 0.92356688, -0.16,
+                                -0.28 ,      -0.88   ,     0.25 ,      -0.846   ,   -0.24981132 ,-0.91823529,
+                                -0.945  ,    -0.925   ,   -0.929   ,   -0.49    ,   -0.18      ])
+        if step > 250:
+            action[-17:] = np.array([-0.4199236 ,  1.      ,   -0.9840558 ,  0.35299219,  0.92356688,  0.02095238,
+                                        -0.28    ,   -0.88  ,      0.25      , -0.846     , -0.24981132, -0.91823529,
+                                        -0.945   ,   -0.925   ,   -0.929    ,  -0.49     ,  -0.918     ])
+        if step > 350:
+            action[-17:] = np.array([-0.4199236 ,  1.     ,    -0.9840558,   0.35299219 , 0.3910828 ,  0.02095238,
+                                        -0.28    ,   -0.88     ,   0.25   ,    -0.846     , -0.24981132 ,-0.91823529,
+                                        -0.945    ,  -0.925    ,  -0.929    ,  -0.49  ,     -0.918     ])
         ################################################
 
         base = rc.act_on_environment(action)
@@ -106,6 +130,7 @@ while not flat_completed:
         flag_trial = base["feedback"][2]
         flat_completed = base["eval_completed"]
         ret += base["feedback"][1]
+        step += 1
 
         if flag_trial:
             print(f"Return was {ret}")

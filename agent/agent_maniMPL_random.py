@@ -74,8 +74,10 @@ else:
 
 #policy = Policy(rc)
 path = '/'.join(os.path.realpath('baseline.zip').split('/')[:-1])
-print(path)
-model = PPO.load(os.path.join(path, 'myochallenge_2024', 'agent','baseline'))
+
+root_path = os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir)))
+print(root_path)
+model = PPO.load(os.path.join(root_path, 'agent','baseline'))
 
 print('Loading Manipulation Policy')
 

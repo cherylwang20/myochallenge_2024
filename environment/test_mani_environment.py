@@ -70,6 +70,11 @@ class Environment(evaluation_pb2_grpc.EnvironmentServicer):
         new_out_keys = unpack_for_grpc(request.SerializedEntity)
         message = pack_for_grpc(env.set_output_keys(new_out_keys))
         return evaluation_pb2.Package(SerializedEntity=message)
+    
+    def set_environment_keys(self, request, context):
+        new_env_keys = unpack_for_grpc(request.SerializedEntity)
+        message = pack_for_grpc(env.set_environment_keys(new_env_keys))
+        return evaluation_pb2.Package(SerializedEntity=message)
 
     def reset(self, request, context):
         self.score = 0

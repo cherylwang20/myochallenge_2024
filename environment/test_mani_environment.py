@@ -23,11 +23,14 @@ EVALUATION_COMPLETED = False
 import myosuite
 
 class evaluator_environment:
+    DEFAULT_NORMALIZE_ACT = True
+    
     def __init__(self, environment="myoChallengeBimanual-v0"):
         self.score = 0
         self.feedback = None
         self.environment = environment
-        self.env = gym.make(environment)
+        self.normalize_act = DEFAULT_NORMALIZE_ACT
+        self.env = gym.make(environment, normalize_act=self.normalize_act)
 
     def get_output_keys(self):
         print(self.env.obs_keys)
@@ -40,6 +43,11 @@ class evaluator_environment:
         self.obs_output_keys = key_set['obs_keys'] # List
         self.normalize_act = key_set['normalize_act']
         self._reInitEnvironment()
+
+    def _reInitEnvironment(self):
+        self.env = gym.make(self.environment, 
+                            obs_keys=self.obs_output_keys, 
+                            normalize_act=self.normalize_act)
 
     def reset(self):
         return self.env.reset()

@@ -84,6 +84,7 @@ print('Loading Manipulation Policy')
 # compute correct observation space using the custom keys
 shape = get_custom_observation(rc, custom_obs_keys).shape
 rc.set_output_keys(custom_obs_keys)
+rc.set_environment_keys({'normalize_act':False})
 
 flat_completed = None
 trial = 0

@@ -85,10 +85,10 @@ print('Loading Manipulation Policy')
 shape = get_custom_observation(rc, custom_obs_keys).shape
 rc.set_output_keys(custom_obs_keys)
 
-custom_environment_varibles = {'obs_keys':custom_obs_keys, 'normalize_act':False}
+#custom_environment_varibles = {'obs_keys':custom_obs_keys, 'normalize_act':False}
 
 # Setting the keys to the environment
-rc.set_environment_keys(custom_environment_varibles)
+#rc.set_environment_keys(custom_environment_varibles)
 
 flat_completed = None
 trial = 0
